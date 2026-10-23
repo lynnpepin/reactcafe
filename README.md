@@ -1,3 +1,6 @@
+(note: update from React Notes in Obsidian)
+
+---
 
 I've been programming in one form or another since I was seven or eight. I am comfortable with HTML, and I'm experienced in fullstack web dev. Despite decades of experience, I've barely ever touched React or Next.js. These are very in-demand tools, and I want to see if the grass is really greener. Much as Svelte and SvelteKit beckon, I want to be where the party is, and that's in Reactland.
 
