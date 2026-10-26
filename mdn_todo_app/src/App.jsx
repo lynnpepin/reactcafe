@@ -1,42 +1,64 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Todo, Form, FilterButton } from './Components.jsx'
+import { useState } from "react";
+import { nanoid } from 'nanoid';
 
+function App(props){
+  
+  const [tasks, setTasks] = useState(props.tasks);
+
+  function toggleTaskCompleted(id) {
+    const updatedTasks = tasks.map((task) => {
+      if (id === task.id) {
+        return {...task, completed: !task.completed };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+  }
+  function deleteTask(id) {
+    const updatedTasks = tasks.filter((task) => id !== task.id);
+    setTasks(updatedTasks);
+  }
+
+  const taskList = tasks?.map((task) => (
+    <Todo
+      id={task.id}
+      name={task.name}
+      completed={task.completed}
+      key={task.id}
+      toggleTaskCompleted={toggleTaskCompleted}
+      deleteTask={deleteTask}
+    />
+  ));
+
+  function addTask(name) {
+    const newTask = { id: `todo-${nanoid()}`, name, completed: false }
+    setTasks([...tasks, newTask]);
+  }
+  
+  // Wow! It updates on its own!
+  const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
+  const headingText = `${taskList.length} ${tasksNoun} remaining`;
+  
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>🧛 Vwaa I am da Count 🧛</h1>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <div className="ticks"></div>
-      <div className="ticks"></div>
-
-      <section id="spacer"></section>
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <div className="todoapp stack-large">
+      <h1>A todo app :)</h1>
+      <Form onSubmit={addTask}/>
+      <div className="filters btn-group stack-exception">
+        <FilterButton />
+        <FilterButton />
+        <FilterButton />
+      </div>
+      <h2 id="list-heading">{headingText}</h2>
+      <ul
+        role="list"
+        className="todo-list stack-large stack-exception"
+        aria-labelledby="list-heading">
+        {taskList}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+export default App;
